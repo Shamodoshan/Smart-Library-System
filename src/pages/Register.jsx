@@ -50,6 +50,7 @@ const Register = () => {
         studentId: studentId,
         rfid: rfid,
         email: email,
+        role: 'student',
         createdAt: new Date().toISOString()
       });
 

@@ -589,6 +589,163 @@
   line-height: 1.45;
 }
 
+.admin-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse 80% 40% at 15% 0%, rgba(99, 102, 241, 0.18), transparent),
+    var(--bg-primary);
+}
+
+.admin-topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.admin-topbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-brand-text h1 {
+  font-size: 1rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.admin-brand-text p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.admin-user-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.admin-user-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.admin-user-meta {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.admin-main {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 1.25rem;
+}
+
+.admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-seat-detail-panel .admin-note,
+.admin-student-list-panel .admin-note {
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  margin-top: 0.6rem;
+}
+
+.admin-seat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.assignment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.assignment-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.student-table-wrap {
+  overflow-x: auto;
+}
+
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  min-width: 100%;
+}
+
+.student-table th,
+.student-table td {
+  text-align: left;
+  padding: 0.75rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.85rem;
+}
+
+.student-table th {
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.student-table td {
+  color: var(--text-primary);
+}
+
+@media (max-width: 1023px) {
+  .admin-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .admin-topbar {
+    padding: 1rem 0.95rem 0.75rem;
+  }
+  .admin-main {
+    padding: 1rem 0.95rem 1.5rem;
+  }
+}
+
 /* ─── Tablet (≥480px) ─── */
 @media (min-width: 480px) {
   .student-brand-text p {

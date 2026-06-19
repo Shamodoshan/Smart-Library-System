@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "./firebase";
 import Home from "./pages/student/Home";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
@@ -44,14 +46,126 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+const RoleRouter = () => {
+  const [role, setRole] = useState(null);
+  const [loadingRole, setLoadingRole] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setRole(null);
+        setLoadingRole(false);
+        return;
+      }
+
+      try {
+        const profileDoc = await getDoc(doc(db, 'users', user.uid));
+        const profile = profileDoc.exists() ? profileDoc.data() : { role: 'student' };
+        setRole(profile.role || 'student');
+      } catch (error) {
+        console.error('Failed to load user role:', error);
+        setRole('student');
+      } finally {
+        setLoadingRole(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loadingRole) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'var(--bg-primary)',
+        color: 'var(--text-secondary)',
+        fontFamily: 'var(--font-sans)',
+        fontSize: '1rem',
+        fontWeight: '600'
+      }}>
+        Loading dashboard…
+      </div>
+    );
+  }
+
+  if (role === 'admin') {
+    return <Navigate to="/admin" replace />;
+  }
+
+  return <Home />;
+};
+
+const AdminRoute = ({ children }) => {
+  const [role, setRole] = useState(null);
+  const [loadingRole, setLoadingRole] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setRole(null);
+        setLoadingRole(false);
+        return;
+      }
+
+      try {
+        const profileDoc = await getDoc(doc(db, 'users', user.uid));
+        const profile = profileDoc.exists() ? profileDoc.data() : { role: 'student' };
+        setRole(profile.role || 'student');
+      } catch (error) {
+        console.error('Failed to load user role:', error);
+        setRole('student');
+      } finally {
+        setLoadingRole(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loadingRole) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'var(--bg-primary)',
+        color: 'var(--text-secondary)',
+        fontFamily: 'var(--font-sans)',
+        fontSize: '1rem',
+        fontWeight: '600'
+      }}>
+        Verifying admin access…
+      </div>
+    );
+  }
+
+  if (role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Protected monitor route */}
+        {/* Role-aware landing route */}
         <Route path="/" element={
           <ProtectedRoute>
-            <Home />
+            <RoleRouter />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
           </ProtectedRoute>
         } />
         
